@@ -13,6 +13,7 @@
     "react-scripts": "1.0.11",
     "recompose": "^0.25.0",
     "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.71.5"
   },

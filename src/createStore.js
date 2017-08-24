@@ -1,5 +1,9 @@
-import { compose, createStore } from 'redux'
-import { reactReduxFirebase } from 'react-redux-firebase'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+import {
+  reactReduxFirebase,
+  firebaseStateReducer as firebase
+} from 'react-redux-firebase'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAAkBQ0Iaf-eBrC3TBLZKgFf1O1oEzjpoc',
@@ -11,21 +15,21 @@ const firebaseConfig = {
 }
 
 const config = {
-  userProfile: 'users',
-  enableLogging: false
+  userProfile: 'users'
 }
 
-const createStoreWithFirebase = compose(
-  reactReduxFirebase(firebaseConfig, config)
-)(createStore)
+const rootReducer = combineReducers({
+  firebase
+})
 
-const rootReducer = (state, action) => {
-  switch (action.type) {
-    default:
-      return state
-  }
-}
+const composeEnhancers = composeWithDevTools({
+  actionsBlacklist: []
+})
 
-const initialState = {}
-
-export const store = createStoreWithFirebase(rootReducer, initialState)
+export const store = createStore(
+  rootReducer,
+  composeEnhancers(
+    reactReduxFirebase(firebaseConfig, config),
+    applyMiddleware()
+  )
+)

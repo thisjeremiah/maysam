@@ -2,9 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { Link } from 'react-router-dom'
-import { firebaseConnect } from 'react-redux-firebase'
+import { pathToJS, firebaseConnect } from 'react-redux-firebase'
 
-const Nav = ({ firebase }) =>
+const Nav = ({ firebase, auth }) =>
   <div>
     <ul>
       <li>
@@ -14,11 +14,14 @@ const Nav = ({ firebase }) =>
         <Link to="/login">Login</Link>
       </li>
     </ul>
-    <button onClick={() => console.log(firebase.logout) || firebase.logout()}>
-      Logout
-    </button>
+    {auth
+      ? <button onClick={() => firebase.logout()}>Logout</button>
+      : <p>Go to login page</p>}
   </div>
 
-const enhance = compose(connect(), firebaseConnect())
+const mapStateToProps = ({ firebase }) => ({
+  auth: pathToJS(firebase, 'auth')
+})
 
+const enhance = compose(firebaseConnect(), connect(mapStateToProps))
 export default enhance(Nav)
